@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
@@ -33,7 +34,15 @@ func GetPlaces(ctx context.Context, lat, lon float64, radius int, limit int) (mo
 		return result, fmt.Errorf("invalid content type: %s", resp.Header.Get("Content-Type"))
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	// Читаем тело ответа для отладки
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return result, err
+	}
+	fmt.Println("OpenTripMap GetPlaces Response:", string(body)) // Добавлено для отладки
+
+	// Декодируем JSON
+	if err := json.Unmarshal(body, &result); err != nil {
 		return result, err
 	}
 	return result, nil
@@ -61,7 +70,15 @@ func GetPlaceDescription(ctx context.Context, xid string) (models.PlaceDescripti
 		return result, fmt.Errorf("invalid content type: %s", resp.Header.Get("Content-Type"))
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	// Читаем тело ответа для отладки
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return result, err
+	}
+	fmt.Println("OpenTripMap GetPlaceDescription Response:", string(body)) // Добавлено для отладки
+
+	// Декодируем JSON
+	if err := json.Unmarshal(body, &result); err != nil {
 		return result, err
 	}
 	return result, nil

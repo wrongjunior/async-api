@@ -4,7 +4,7 @@ type GeocodeResponse struct {
 	Hits []struct {
 		Point struct {
 			Lat float64 `json:"lat"`
-			Lon float64 `json:"lon"`
+			Lon float64 `json:"lng"` // Исправленный тег
 		} `json:"point"`
 		Name        string `json:"name"`
 		Country     string `json:"country"`

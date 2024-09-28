@@ -10,4 +10,6 @@ const (
 
 	OpenTripMapAPIURL         = "https://api.opentripmap.com/0.1/en/places/radius?radius=%d&lon=%f&lat=%f&kinds=interesting_places&limit=%d&format=geojson&apikey=%s"
 	OpenTripMapDescriptionURL = "https://api.opentripmap.com/0.1/en/places/xid/%s?apikey=%s"
+	// Добавьте Nominatim URL
+	NominatimAPIURL = "https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1&limit=5&accept-language=ru"
 )

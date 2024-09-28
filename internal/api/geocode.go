@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
@@ -15,7 +16,12 @@ import (
 func SearchLocations(ctx context.Context, query string) ([]models.LocationResult, error) {
 	var result models.GeocodeResponse
 	url := fmt.Sprintf(config.GraphhopperAPIURL, query, config.GraphhopperAPIKey)
-	req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		log.Println("Error creating request:", err)
+		return nil, err
+	}
+
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		log.Println("Error fetching location:", err)
@@ -35,8 +41,15 @@ func SearchLocations(ctx context.Context, query string) ([]models.LocationResult
 		return nil, fmt.Errorf("invalid content type: %s", resp.Header.Get("Content-Type"))
 	}
 
+	// Читаем тело ответа для отладки
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("Geocode API Response:", string(body)) // Для отладки
+
 	// Декодируем JSON
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	if err := json.Unmarshal(body, &result); err != nil {
 		return nil, err
 	}
 
@@ -51,7 +64,7 @@ func SearchLocations(ctx context.Context, query string) ([]models.LocationResult
 			HouseNumber: hit.HouseNumber,
 			Postcode:    hit.Postcode,
 			Lat:         hit.Point.Lat,
-			Lon:         hit.Point.Lon,
+			Lon:         hit.Point.Lon, // Теперь Lon корректно маппится
 		})
 	}
 
