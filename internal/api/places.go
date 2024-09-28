@@ -11,11 +11,16 @@ import (
 	"strings"
 )
 
-// Получение интересных мест по координатам с фильтрацией
+// GetPlaces получает список интересных мест по координатам
 func GetPlaces(ctx context.Context, lat, lon float64, radius int, limit int) (models.PlacesResponse, error) {
 	var result models.PlacesResponse
 	url := fmt.Sprintf(config.OpenTripMapAPIURL, radius, lon, lat, limit, config.OpenTripMapAPIKey)
-	req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		log.Println("Error creating request:", err)
+		return result, err
+	}
+
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		log.Println("Error fetching places:", err)
@@ -34,11 +39,16 @@ func GetPlaces(ctx context.Context, lat, lon float64, radius int, limit int) (mo
 	return result, nil
 }
 
-// Получение описания места по его xid
+// GetPlaceDescription получает описание места по его xid
 func GetPlaceDescription(ctx context.Context, xid string) (models.PlaceDescriptionResponse, error) {
 	var result models.PlaceDescriptionResponse
 	url := fmt.Sprintf(config.OpenTripMapDescriptionURL, xid, config.OpenTripMapAPIKey)
-	req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		log.Println("Error creating request:", err)
+		return result, err
+	}
+
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		log.Println("Error fetching place description:", err)

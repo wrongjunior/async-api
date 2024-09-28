@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// GetWeather получает погоду по координатам
 func GetWeather(ctx context.Context, lat, lon float64) (models.WeatherResponse, error) {
 	var result models.WeatherResponse
 	url := fmt.Sprintf(config.OpenWeatherAPIURL, lat, lon, config.OpenWeatherAPIKey)
