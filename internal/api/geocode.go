@@ -46,8 +46,8 @@ func SearchLocations(ctx context.Context, query string) ([]models.LocationResult
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Geocode API Response:", string(body)) // Для отладки
-
+	//fmt.Println("Geocode API Response:", string(body)) // Для отладки
+	//
 	// Декодируем JSON
 	if err := json.Unmarshal(body, &result); err != nil {
 		return nil, err

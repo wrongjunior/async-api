@@ -39,7 +39,7 @@ func GetPlaces(ctx context.Context, lat, lon float64, radius int, limit int) (mo
 	if err != nil {
 		return result, err
 	}
-	fmt.Println("OpenTripMap GetPlaces Response:", string(body)) // Добавлено для отладки
+	//fmt.Println("OpenTripMap GetPlaces Response:", string(body)) // Добавлено для отладки
 
 	// Декодируем JSON
 	if err := json.Unmarshal(body, &result); err != nil {
@@ -75,7 +75,7 @@ func GetPlaceDescription(ctx context.Context, xid string) (models.PlaceDescripti
 	if err != nil {
 		return result, err
 	}
-	fmt.Println("OpenTripMap GetPlaceDescription Response:", string(body)) // Добавлено для отладки
+	//fmt.Println("OpenTripMap GetPlaceDescription Response:", string(body)) // Добавлено для отладки
 
 	// Декодируем JSON
 	if err := json.Unmarshal(body, &result); err != nil {
